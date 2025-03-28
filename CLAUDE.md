@@ -90,6 +90,27 @@ Use Stagehand to search for the latest JavaScript frameworks on Google and extra
 
 ## Running Locally
 
+### Setting Up Environment Variables
+
+First, create an `.env` file in each server directory with your API keys:
+
+**For browserbase/.env:**
+```
+BROWSERBASE_API_KEY=your_browserbase_api_key_here
+BROWSERBASE_PROJECT_ID=your_browserbase_project_id_here
+```
+
+**For stagehand/.env:**
+```
+BROWSERBASE_API_KEY=your_browserbase_api_key_here
+BROWSERBASE_PROJECT_ID=your_browserbase_project_id_here
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+Example `.env.example` files are provided in each directory as reference.
+
+### Starting The Servers
+
 ```bash
 # For Browserbase MCP
 cd browserbase
@@ -102,6 +123,18 @@ cd stagehand
 npm install
 npm run build
 node dist/index.js
+```
+
+### Using Wrapper Scripts
+
+Alternatively, you can use the wrapper scripts, which will automatically use the `.env` files:
+
+```bash
+# For Browserbase MCP
+./browserbase-wrapper.sh
+
+# For Stagehand MCP
+./stagehand-wrapper.sh
 ```
 
 ## Debugging
