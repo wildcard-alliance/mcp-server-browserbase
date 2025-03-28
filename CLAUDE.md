@@ -11,66 +11,81 @@ This package contains two MCP servers for cloud browser automation:
    - Uses natural language instructions to perform complex browser tasks
    - Supports multiple models, including OpenAI's GPT-4 and Anthropic's Claude
 
-## Usage
+## Setup Instructions
 
-### Browserbase MCP
+### Prerequisites
+- Node.js 18 or higher
+- A Browserbase account (get API key from https://www.browserbase.com/)
 
-```typescript
-// Example of using Browserbase MCP
-import { McpClient } from '@modelcontextprotocol/sdk';
+### Configuration
 
-const client = new McpClient({
-  hostname: 'localhost',
-  port: 8080,
-  protocol: 'http'
-});
+For either server, you need to add configuration to your Claude Desktop config:
 
-// Navigate to a URL
-await client.callFunction('browserbase_navigate', { url: 'https://example.com' });
-
-// Take a screenshot
-const result = await client.callFunction('browserbase_screenshot', { 
-  name: 'example-screenshot',
-  selector: '.main-content'
-});
+#### Browserbase Server
+```json
+{
+  "mcpServers": {
+    "browserbase": {
+      "command": "bash",
+      "args": [
+        "/path/to/smarty-pants/packages/modelcontextprotocol/mcp-server-browserbase/browserbase-wrapper.sh"
+      ],
+      "env": {
+        "BROWSERBASE_API_KEY": "your-browserbase-api-key-here",
+        "BROWSERBASE_PROJECT_ID": "your-browserbase-project-id-here"
+      }
+    }
+  }
+}
 ```
 
-### Stagehand MCP
-
-```typescript
-// Example of using Stagehand MCP
-import { McpClient } from '@modelcontextprotocol/sdk';
-
-const client = new McpClient({
-  hostname: 'localhost',
-  port: 8081,
-  protocol: 'http'
-});
-
-// Use Stagehand to perform a complex task with one instruction
-const result = await client.callFunction('stagehand_act', {
-  instruction: 'Find the latest article about AI on the homepage and click on it'
-});
+#### Stagehand Server
+```json
+{
+  "mcpServers": {
+    "stagehand": {
+      "command": "bash",
+      "args": [
+        "/path/to/smarty-pants/packages/modelcontextprotocol/mcp-server-browserbase/stagehand-wrapper.sh"
+      ],
+      "env": {
+        "BROWSERBASE_API_KEY": "your-browserbase-api-key-here",
+        "BROWSERBASE_PROJECT_ID": "your-browserbase-project-id-here", 
+        "OPENAI_API_KEY": "your-openai-api-key-here"
+      }
+    }
+  }
+}
 ```
 
-## Requirements
+## Tools
 
-To use this MCP server, you need:
+### Browserbase Tools
+- `browserbase_create_session` - Create a new cloud browser session
+- `browserbase_navigate` - Navigate to any URL in the browser
+- `browserbase_screenshot` - Capture screenshots of the page or elements
+- `browserbase_click` - Click elements on the page
+- `browserbase_fill` - Fill out input fields
+- `browserbase_evaluate` - Execute JavaScript in the browser console
+- `browserbase_get_content` - Extract content from the current page
+- `browserbase_parallel_sessions` - Create multiple browser sessions
 
-1. A Browserbase API key
-2. Node.js v18+
+### Stagehand Tools
+- `stagehand_navigate` - Navigate to any URL in the browser
+- `stagehand_act` - Perform an action on the web page (e.g., "click the login button")
+- `stagehand_extract` - Extract data from the web page
+- `stagehand_observe` - Observe actions that can be performed on the web page
 
-## Configuration
+## Example Usage
 
-Set the following environment variables:
+### Browserbase Example:
+```
+Help me search for "cloud browser automation" on Google and take a screenshot of the results.
+```
 
-```bash
-# Required for both Browserbase and Stagehand
-BROWSERBASE_API_KEY=your_api_key_here
-
-# Required for Stagehand
-OPENAI_API_KEY=your_openai_key_here  # If using OpenAI models
-ANTHROPIC_API_KEY=your_anthropic_key_here  # If using Anthropic models
+### Stagehand Example:
+```
+Use Stagehand to search for the latest JavaScript frameworks on Google and extract the top 5 results.
 ```
 
 ## Running Locally
@@ -87,4 +102,30 @@ cd stagehand
 npm install
 npm run build
 node dist/index.js
+```
+
+## Debugging
+If you encounter any issues:
+1. Check that all API keys are set correctly
+2. Ensure the server wrappers have execute permissions (`chmod +x *.sh`)
+3. Look for error messages in the server output
+
+## Requirements
+
+To use this MCP server, you need:
+
+1. A Browserbase API key
+2. Node.js v18+
+
+## Configuration
+
+Set the following environment variables:
+
+```bash
+# Required for both Browserbase and Stagehand
+BROWSERBASE_API_KEY=your_api_key_here
+BROWSERBASE_PROJECT_ID=your_project_id_here
+
+# Required for Stagehand
+OPENAI_API_KEY=your_openai_key_here  # If using OpenAI models
 ```
